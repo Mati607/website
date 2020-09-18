@@ -1,0 +1,46 @@
+*{
+	font-family: sans-serif;
+}
+h1{
+	text-align: center;
+	color: white;
+	margin-top: 30px;
+
+}
+h4{
+	color: white;	
+}
+.custom{
+	margin: 50px auto;
+	width: 650px;
+	height: 450px;
+	overflow: hidden;
+}
+label{
+	color: white;
+}
+#buttons{
+	position: relative;
+	top:-350px;
+}
+input{
+	display: block;
+	margin-left: 50px;
+	margin-right: 50px;
+	border: 2px solid black;
+	border-radius: 5px;
+	width: 50%;
+	height: 35px;
+	border-color: #0000ae;
+}
+button{
+	margin-left: 52px;
+}
+#form1{
+position: relative;
+}
+#form2{
+position: relative;
+left: 650px;
+top:-280px;
+}

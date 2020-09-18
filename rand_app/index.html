@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Random Selector</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<h1>Random Selector App</h1>
+	<div class = 'main'>
+		<label for="num"><h3>Select number of entries:</h3></label>
+		<input type='number' id="num" value=0>
+		<button onclick="generate();">Submit</button>
+	</div>
+</body>
+</html>
+
+<script type="text/javascript">
+	var num = 0;
+	var entries = [];
+	function generate(){
+		num = document.querySelector("#num").value;
+		var obj = document.querySelector(".main");
+		var template = "<label for='info{x}'><h3>Entry {x}</h3></label> <input type='text' id='info{x}'><br>";
+		var html = "";
+		var btn = "<button onclick='get_data();'>Submit</button>";
+		for(var i=0;i<num;i++){
+			var repl = (i+1).toString();
+			var html_new = template.replaceAll("{x}",repl);
+			html = html+ html_new;
+		}
+		html = html + btn;
+		obj.innerHTML=html;
+	}
+
+	function get_data(){
+		var html ="<h3>To select a random entry from following entries press the button</h3><br>";
+		var template = "<h3>{x}</h3><br>"
+		var obj = document.querySelector(".main");
+		for( var i = 0; i<num; i++){
+			var index = "#info"+(i+1).toString();
+			var data = document.querySelector(index).value;
+			entries.push(data);	
+			var new_html = template.replace("{x}",data);
+			html = html + new_html;
+		}
+		html = html + "<button onclick='random();'>run</button>";
+		obj.innerHTML = html;
+	}
+	
+	function random(){
+		var rand = Math.floor((Math.random() * num) );
+		var obj  = document.querySelector(".main");
+		var html = "<h2>"+entries[rand]+"</h2>";
+		var btn = "<button onclick='random();'>run again</button>";
+		var reload = "<button onclick='document.location.reload();'> return to main screen</button>";
+		html = html+btn+reload;
+		obj.innerHTML = html;
+	}
+</script>
