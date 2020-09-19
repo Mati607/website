@@ -1,4 +1,27 @@
 <!DOCTYPE html>
+<style type="text/css">
+	body{
+		position: relative;
+	}
+	.nav{
+		background: black;
+		color: white;
+	}
+	.main{
+		margin-top: 3%;
+		margin-left: 1%;
+	}
+	input{
+		display:block;
+		width:20%;
+	}
+	.ans{
+		border: 2px solid black;
+		width:98%;
+		padding-left:8px;
+	}
+</style>
+
 <html>
 <head>
 	<title>Random Selector</title>
@@ -15,11 +38,14 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<h1>Random Selector App</h1>
+	<div class='nav'>
+		<h1>Random Selector App</h1>
+	</div>
+
 	<div class = 'main'>
 		<label for="num"><h3>Select number of entries:</h3></label>
-		<input type='number' id="num" value=0>
-		<button onclick="generate();">Submit</button>
+		<input type='number' id="num" value=0><br>
+		<button class="btn btn-primary" onclick="generate();">Submit</button>
 	</div>
 </body>
 </html>
@@ -32,7 +58,7 @@
 		var obj = document.querySelector(".main");
 		var template = "<label for='info{x}'><h3>Entry {x}</h3></label> <input type='text' id='info{x}'><br>";
 		var html = "";
-		var btn = "<button onclick='get_data();'>Submit</button>";
+		var btn = "<button class = 'btn btn-primary' onclick='get_data();'>Submit</button>";
 		for(var i=0;i<num;i++){
 			var repl = (i+1).toString();
 			var html_new = template.replaceAll("{x}",repl);
@@ -44,25 +70,27 @@
 
 	function get_data(){
 		var html ="<h3>To select a random entry from following entries press the button</h3><br>";
-		var template = "<h3>{x}</h3><br>"
+		var template = "<h3>{y}) {x}</h3><br>"
 		var obj = document.querySelector(".main");
 		for( var i = 0; i<num; i++){
+			var number = (i+1).toString();
 			var index = "#info"+(i+1).toString();
 			var data = document.querySelector(index).value;
 			entries.push(data);	
 			var new_html = template.replace("{x}",data);
+			new_html = new_html.replace("{y}",number);
 			html = html + new_html;
 		}
-		html = html + "<button onclick='random();'>run</button>";
+		html = html + "<button class = 'btn btn-primary' style ='width:10%' onclick='random();'>run</button>";
 		obj.innerHTML = html;
 	}
 	
 	function random(){
 		var rand = Math.floor((Math.random() * num) );
 		var obj  = document.querySelector(".main");
-		var html = "<h2>"+entries[rand]+"</h2>";
-		var btn = "<button onclick='random();'>run again</button>";
-		var reload = "<button onclick='document.location.reload();'> return to main screen</button>";
+		var html = "<h2>Random entry :</h2><br><div class='ans'><h2>"+entries[rand]+"</h2></div>";
+		var btn = "<button class = 'btn btn-primary' style= 'margin-top:5%' onclick='random();'>run again</button>";
+		var reload = "<button class='btn btn-danger' style='margin-left:2%; margin-top:5%'onclick='document.location.reload();'> return to main screen</button>";
 		html = html+btn+reload;
 		obj.innerHTML = html;
 	}
