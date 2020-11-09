@@ -12,7 +12,8 @@
 
 		}
 		function login(){
-			location.reload();
+			x.style.left = "0px";
+			y.style.left = "-10000px";
 		}
 		obj.register = register;
 		obj.login = login;
