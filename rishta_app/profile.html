@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<head>
+	<title>profile page</title>
+	<link rel="stylesheet" type="text/css" href="stylesheet/profile.css">
+</head>
+<body>
+	<div id ="view">
+		<h2>Your profile information</h2>
+		<h3 id =fname>First Name: </h3>
+		<h3 id =lname>Last Name: </h3>
+		<h3 id =email>Email: </h3>
+		<h3 id =gender>Gender: </h3>
+		<button onclick="change_layout(0)">Update profile</button>
+		<button onclick="change_layout(1)">change password</button>
+		<button onclick="change_layout(2)">deactivate profile</button><br><br>
+		<button onclick="window.location.replace('homepage.html')">back</button>
+		<button onclick="logout()">Log out</button>
+	</div>
+	<div id ="change_profile">
+		<h3>Type new profile data below</h3>
+		<label for="fname1">First name:</label><br>
+	  	<input type="text" id="fname1" name="fname1" required><br>
+	  	<label for="lname1">Last name:</label><br>
+	  	<input type="text" id="lname1" name="lname1" required><br>
+	  	<button onclick="c_profile()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform1"></h2>	
+	 </div>
+	 <div id= "change_password">
+	 	<h2> password change</h2>
+	 	<label for="pswrd0">Old Password:</label><br>
+	  	<input type="Password" id="pswrd0" name="pswrd0" required><br>
+	  	<label for="pswrd">New Password:</label><br>
+	  	<input type="Password" id="pswrd" name="pswrd" required><br>
+	  	<button onclick="c_password()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform2"></h2>
+	 </div>
+	  <div id= "delete_account">
+	  	<h2>Delete account</h2>
+	  	<label for="mail1">Email:</label><br>
+	  	<input type="email" id="mail1" name="mail1" required><br>
+	 	<label for="pswrd1">Password:</label><br>
+	  	<input type="Password" id="pswrd1" name="pswrd1" required><br>
+	  	<button onclick="p_delete()">delete account</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform3"></h2>	
+	 </div>
+</body>
+
+</html>
+
+
+<script type="text/javascript">
+	var data = data = sessionStorage.getItem("user_data");
+	data = JSON.parse(data);
+	var temp1 = document.querySelector("#fname");
+	var temp2 = document.querySelector("#lname");
+	var temp3 = document.querySelector("#email");
+	var temp4 = document.querySelector("#gender");
+	temp1.innerText = temp1.innerText +" "+ data.first_name ;	
+	temp2.innerText = temp2.innerText +" "+ data.last_name ;	
+	temp3.innerText = temp3.innerText +" "+ data.email ;	
+	temp4.innerText = temp4.innerText +" "+ data.gender ;	
+
+	function change_layout(x){
+		if(x==0){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#change_profile");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==1){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#change_password");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==2){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#delete_account");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+	}
+	function c_profile(){
+
+		var first = document.querySelector("#fname1");
+		var last = document.querySelector("#lname1");
+
+		if ((first.value != "") && (last.value != "")){
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform1").innerText = response;
+		       if(response == "Account updated!"){
+			       data.first_name = first.value;
+			       data.last_name = last.value;
+			       sessionStorage.setItem("user_data", JSON.stringify(data));
+			       first.value = "";
+			       last.value = "";
+				}
+		    }
+			};
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
+			xhttp.send();
+
+		}
+
+	}
+
+	function c_password(){
+
+		var pswrd = document.querySelector("#pswrd");
+		var pswrd2 = document.querySelector("#pswrd0");
+
+		if((pswrd.value != "") && (pswrd2.value == data.password)){
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform2").innerText = xhttp.responseText;
+		       if(response=="Password updated!"){
+		       	   data.password = pswrd.value;
+			       sessionStorage.setItem("user_data", JSON.stringify(data));
+		       }
+		       pswrd.value = "";
+		       pswrd2.value = "";
+		    }
+			};
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_password?id=${data.id}&password=${pswrd.value}`, true);
+			xhttp.send();
+		}else
+		{
+			document.querySelector("#inform2").innerText = "Incorrect password!";
+			pswrd.value = "";
+		    pswrd2.value = "";
+		}
+	}
+
+	function p_delete(){
+		var mail = document.querySelector("#mail1");
+		var pswrd = document.querySelector("#pswrd1");
+
+		if ((mail.value == data.email) && (pswrd.value == data.password)){
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		      sessionStorage.removeItem("user_data"); 
+		      window.location.replace("login.html");	
+		    }
+			};
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/delete_user?id=${data.id}`, true);
+			xhttp.send();
+
+		}else
+		{
+			document.querySelector("#inform3").innerText = "Invalid ID or Password";
+			mail.value="";
+			pswrd.value="";
+		}
+	}
+
+	function logout(){
+		sessionStorage.removeItem("user_data"); 
+		window.location.replace('login.html')
+	}
+</script>

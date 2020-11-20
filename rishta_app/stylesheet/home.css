@@ -1,0 +1,39 @@
+#main{
+	position:absolute;
+	top:20%;
+	left:30%;
+}
+ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  overflow: hidden;
+	  background-color: #333;
+	  height:57px;
+	}
+
+	li {
+	  float: left;
+	  border-right: 1px solid #bbb;
+	}
+	li:first-child {
+  	border-right: none;
+	}
+
+	li a {
+	  display: block;
+	  color: white;
+	  text-align: center;
+	  padding: 18px 16px;
+	  text-decoration: none;
+	  height:57px;
+	}
+
+	/* Change the link color to #111 (black) on hover */
+	li a:hover:not(.active) {
+	  background-color: #111;
+	}
+
+	.active {
+	  background-color: #4CAF50;
+	}

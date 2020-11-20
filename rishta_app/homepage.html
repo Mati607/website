@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>home page</title>
+	<link rel="stylesheet" type="text/css" href="stylesheet/home.css">
+</head>
+<body>
+	<div>
+		<ul>
+  			<li><a class="active"></a></li>
+  			<li style="float:right"><a onclick="show_profile()" href="#">profile</a></li>
+  			<li style="float:right"><a href="#">Contact</a></li>
+  			<li style="float:right"><a href="#">About</a></li>
+		</ul>
+	</div>
+	<div id ="main"><iframe src="https://giphy.com/embed/EIiJp9cQ3GeEU" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/please-construction-patient-EIiJp9cQ3GeEU">via GIPHY</a></p></div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+	var data = data = sessionStorage.getItem("user_data");
+	data = JSON.parse(data);
+	var temp = document.querySelector(".active");
+	temp.innerText = data.first_name +" "+ data.last_name ;
+
+	function show_profile(){
+		window.location.replace("profile.html");	
+	}
+	
+</script>
