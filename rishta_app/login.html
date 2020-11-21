@@ -120,7 +120,7 @@
 		       pswrd.value = "";
 		    }
 			};
-			xhttp.open("POST", `http://localhost:8000/register?
+			xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/register?
 						first=${first.value}&
 						last=${last.value}&
 						gender=${gender.value}&
@@ -158,7 +158,7 @@
 		      	}
 		    }
 			};
-			xhttp.open("GET", `http://localhost:8000/login?email=${mail.value}&password=${pswrd.value}`, true);
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/login?email=${mail.value}&password=${pswrd.value}`, true);
 			xhttp.send();
 
 		}

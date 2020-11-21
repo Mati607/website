@@ -112,7 +112,7 @@
 				}
 		    }
 			};
-			xhttp.open("GET", `http://localhost:8000/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
 			xhttp.send();
 
 		}
@@ -144,7 +144,7 @@
 		       pswrd2.value = "";
 		    }
 			};
-			xhttp.open("GET", `http://localhost:8000/change_password?id=${data.id}&password=${pswrd.value}`, true);
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_password?id=${data.id}&password=${pswrd.value}`, true);
 			xhttp.send();
 		}else
 		{
@@ -171,7 +171,7 @@
 		      window.location.replace("login.html");	
 		    }
 			};
-			xhttp.open("GET", `http://localhost:8000/delete_user?id=${data.id}`, true);
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/delete_user?id=${data.id}`, true);
 			xhttp.send();
 
 		}else
