@@ -88,17 +88,21 @@
 	}
 	function c_profile(){
 
+		var k = document.querySelector("#inform1");
+
 		var first = document.querySelector("#fname1");
 		var last = document.querySelector("#lname1");
 
 		if ((first.value != "") && (last.value != "")){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
 		       // Typical action to be performed when the document is ready:
 		       var response = xhttp.responseText;
-		       document.querySelector("#inform1").innerText = response;
+		       document.querySelector("#inform1").innerHTML = response;
 		       if(response == "Account updated!"){
 			       data.first_name = first.value;
 			       data.last_name = last.value;
@@ -108,7 +112,7 @@
 				}
 		    }
 			};
-			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
+			xhttp.open("GET", `http://localhost:8000/change_profile?id=${data.id}&first=${first.value}&last=${last.value}`, true);
 			xhttp.send();
 
 		}
@@ -117,17 +121,21 @@
 
 	function c_password(){
 
+		var k = document.querySelector("#inform2");
+
 		var pswrd = document.querySelector("#pswrd");
 		var pswrd2 = document.querySelector("#pswrd0");
 
 		if((pswrd.value != "") && (pswrd2.value == data.password)){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
 		       // Typical action to be performed when the document is ready:
 		       var response = xhttp.responseText;
-		       document.querySelector("#inform2").innerText = xhttp.responseText;
+		       document.querySelector("#inform2").innerHTML = xhttp.responseText;
 		       if(response=="Password updated!"){
 		       	   data.password = pswrd.value;
 			       sessionStorage.setItem("user_data", JSON.stringify(data));
@@ -136,11 +144,11 @@
 		       pswrd2.value = "";
 		    }
 			};
-			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/change_password?id=${data.id}&password=${pswrd.value}`, true);
+			xhttp.open("GET", `http://localhost:8000/change_password?id=${data.id}&password=${pswrd.value}`, true);
 			xhttp.send();
 		}else
 		{
-			document.querySelector("#inform2").innerText = "Incorrect password!";
+			document.querySelector("#inform2").innerHTML = "Incorrect password!";
 			pswrd.value = "";
 		    pswrd2.value = "";
 		}
@@ -150,8 +158,11 @@
 		var mail = document.querySelector("#mail1");
 		var pswrd = document.querySelector("#pswrd1");
 
+		var k = document.querySelector("#inform3");
+
 		if ((mail.value == data.email) && (pswrd.value == data.password)){
 
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
@@ -160,12 +171,12 @@
 		      window.location.replace("login.html");	
 		    }
 			};
-			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/delete_user?id=${data.id}`, true);
+			xhttp.open("GET", `http://localhost:8000/delete_user?id=${data.id}`, true);
 			xhttp.send();
 
 		}else
 		{
-			document.querySelector("#inform3").innerText = "Invalid ID or Password";
+			document.querySelector("#inform3").innerHTML = "Invalid ID or Password";
 			mail.value="";
 			pswrd.value="";
 		}

@@ -98,6 +98,7 @@
 	}
 
 	function make_account(){
+		var k = document.querySelector("#inform1");
 		var first = document.querySelector("#fname");
 		var last = document.querySelector("#lname");
 		var gender = document.querySelector("#gender");
@@ -106,11 +107,12 @@
 
 		if ((first.value != "") && (last.value != "") && (gender.value != "") && (mail.value != "") && (pswrd.value != "")){
 
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 		    if (this.readyState == 4 && this.status == 200) {
 		       // Typical action to be performed when the document is ready:
-		       document.querySelector("#inform1").innerText = xhttp.responseText;
+		       document.querySelector("#inform1").innerHTML = xhttp.responseText;
 		       first.value = "";
 		       last.value = "";
 		       gender.value = "";
@@ -118,7 +120,7 @@
 		       pswrd.value = "";
 		    }
 			};
-			xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/register?
+			xhttp.open("POST", `http://localhost:8000/register?
 						first=${first.value}&
 						last=${last.value}&
 						gender=${gender.value}&
@@ -130,9 +132,12 @@
 	}
 	function do_login()
 	{
+		var k = document.querySelector("#inform");
 		var mail = document.querySelector("#lmail");
 		var pswrd = document.querySelector("#lpswrd");
 		if ((mail.value != "") && (pswrd.value != "")){
+
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -147,13 +152,13 @@
 		       }
 		       else
 		      	{
-		      		document.querySelector("#inform").innerText = "Invalid Id or password";
+		      		document.querySelector("#inform").innerHTML = "Invalid Id or password";
 		      		mail.value = "";
 		      		pswrd.value = "";
 		      	}
 		    }
 			};
-			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/login?email=${mail.value}&password=${pswrd.value}`, true);
+			xhttp.open("GET", `http://localhost:8000/login?email=${mail.value}&password=${pswrd.value}`, true);
 			xhttp.send();
 
 		}
