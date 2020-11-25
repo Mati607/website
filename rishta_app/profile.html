@@ -13,6 +13,7 @@
 		<button onclick="change_layout(0)">Update profile</button>
 		<button onclick="change_layout(1)">change password</button>
 		<button onclick="change_layout(2)">deactivate profile</button><br><br>
+		<button onclick="change_layout(3)">Edit About info</button>
 		<button onclick="window.location.replace('homepage.html')">back</button>
 		<button onclick="logout()">Log out</button>
 	</div>
@@ -45,6 +46,26 @@
 	  	<button onclick="p_delete()">delete account</button>
 	  	<button onclick="location.reload()">Back</button>
 	  	<h2 id="inform3"></h2>	
+	 </div>
+	 <div id ="about_info">
+		<h3>Type about info below</h3>
+		<label for="age">Age:</label><br>
+	  	<input type="text" id="age" name="age" required><br>
+	  	<label for="rel">Religion:</label><br>
+	  	<input type="text" id="rel" name="rel" required><br>
+	  	<label for="edu">Education:</label><br>
+	  	<input type="text" id="edu" name="edu" required><br>
+	  	<label for="loc">Location:</label><br>
+	  	<input type="text" id="loc" name="loc" required><br>
+	  	<label for="hei">Height:</label><br>
+	  	<input type="text" id="hei" name="hei" required><br>
+	  	<label for="prof">profession:</label><br>
+	  	<input type="text" id="prof" name="prof" required><br>
+	  	<label for="status">Marital status:</label><br>
+	  	<input type="text" id="status" name="status" required><br>
+	  	<button onclick="aboutinfo()">Submit</button>
+	  	<button onclick="location.reload()">Back</button>
+	  	<h2 id="inform4"></h2>	
 	 </div>
 </body>
 
@@ -81,6 +102,13 @@
 		if(x==2){
 			var x = document.querySelector("#view");
 			var y = document.querySelector("#delete_account");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
+		if(x==3){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#about_info");
 			x.style.visibility = "hidden";
 			y.style.visibility = "visible";
 			
@@ -185,5 +213,49 @@
 	function logout(){
 		sessionStorage.removeItem("user_data"); 
 		window.location.replace('login.html')
+	}
+
+
+	function aboutinfo(){
+		var age = document.querySelector("#age");
+		var rel = document.querySelector("#rel");
+		var edu = document.querySelector("#edu");
+		var loc = document.querySelector("#loc");
+		var status = document.querySelector("#status");
+		var prof= document.querySelector("#prof");
+		var hei= document.querySelector("#hei");
+		var k = document.querySelector("#inform4");
+
+		if ((age.value != "") && (rel.value != "")&& (edu.value != "")&& (loc.value != "")&& (status.value != "")&& (prof.value != "")&& (hei.value != ""))
+		{
+			k.innerHTML = "<img src='loading.gif' alt='loading'>"
+
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+		    if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		       var response = xhttp.responseText;
+		       document.querySelector("#inform4").innerHTML = response;
+		       age.value = "";
+		       rel.value = "";
+		       edu.value = "";
+		       loc.value = "";
+		       status.value = "";
+		       prof.value = "";
+		       hei.value = "";
+
+		    }
+			};
+			xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/update_aboutinfo?
+				id=${data.id}
+				&age=${age.value}
+				&rel=${rel.value}
+				&edu=${edu.value}
+				&loc=${loc.value}
+				&status=${status.value}
+				&prof=${prof.value}
+				&hei=${hei.value}`, true);
+			xhttp.send();
+		}
 	}
 </script>

@@ -3,29 +3,368 @@
 <head>
 	<title>home page</title>
 	<link rel="stylesheet" type="text/css" href="stylesheet/home.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div>
 		<ul>
-  			<li><a class="active"></a></li>
+  			<li><a class="activeyyy"></a></li>
   			<li style="float:right"><a onclick="show_profile()" href="#">profile</a></li>
   			<li style="float:right"><a href="#">Contact</a></li>
   			<li style="float:right"><a href="#">About</a></li>
 		</ul>
 	</div>
-	<div id ="main"><iframe src="https://giphy.com/embed/EIiJp9cQ3GeEU" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/please-construction-patient-EIiJp9cQ3GeEU">via GIPHY</a></p></div>
-</body>
+	<div id="post">
+		<h3 id ="inform"></h3>
+		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Make a rishta post</button>
+		<button type="button" class="btn btn-info btn-block" onclick="inbox_visible()">Check Inbox</button>
+		<div id="content">
+			<button style="float:right; margin:10px;"onclick="document.querySelector('#content').style.display='none'" type="button" class="btn btn-danger btn-sm">X</button>
+			<h3>Your rishta post will include the following information about you:<h3>
+			<div class='row'>
+				<div class="col-md-4">
+					<h3 id ="age">Age: </h3>
+					<h3 id ="rel">Religion: </h3>
+					<h3 id ="edu">Education: </h3>
+					<h3 id ="prof"r>Profession: </h3>
+				</div>
+				<div class="col-md-4">
+					<h3 id ="loc">Location: </h3>
+					<h3 id ="hei">Height: </h3>
+					<h3 id ="gender">Gender: </h3>
+					<h3 id ="status">Marital Status: </h3>
+				</div>
+			</div>
+	  		<input type="text" id="descr" name="descr" placeholder="Describe yourself here!" required><br>
+	  		<button onclick="publish()" type="button" class="btn btn-success btn-sm">Publish Post</button>
+		</div>
+	</div>
 
+	<div class="inbox">
+		<button style="float:right; margin:5px;"onclick="document.querySelector('.inbox').style.display='none'" type="button" class="btn btn-danger btn-sm">X</button><hr>
+		<div class='row'>
+			<div class="col-md-4 names">
+				<h3><strong>Sender</strong></h3><hr>
+			</div>
+			<div class="col-md-8 messages">
+				<h3><strong>Messages</strong></h3><hr>
+			</div>
+		</div>
+	</div>
+
+	<div class="holder"></div>
+</body>
 </html>
 
 <script type="text/javascript">
-	var data = data = sessionStorage.getItem("user_data");
+	var data = sessionStorage.getItem("user_data");
 	data = JSON.parse(data);
-	var temp = document.querySelector(".active");
+	var temp = document.querySelector(".activeyyy");
 	temp.innerText = data.first_name +" "+ data.last_name ;
+	var id_focus = "";
 
 	function show_profile(){
 		window.location.replace("profile.html");	
 	}
+
+	function makepost(){
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+
+		var a=document.querySelector("#age");
+		var b=document.querySelector("#gender");
+		var c=document.querySelector("#loc");
+		var d=document.querySelector("#prof");
+		var e=document.querySelector("#edu");
+		var f=document.querySelector("#hei");
+		var g=document.querySelector("#rel");
+		var h=document.querySelector("#status");
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		       // Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if(response !== "NULL")
+		    	{
+		     	response = JSON.parse(response);
+		     	a.innerText = "Age:"+" "+ response.age;
+		     	b.innerText = "Gender:"+" "+ data.gender;
+		     	c.innerText = "Location:"+" "+ response.location;
+		     	d.innerText = "Profession:"+" "+ response.profession;
+		     	e.innerText = "Education:"+" "+ response.education;
+		     	f.innerText = "Height:"+" "+ response.height;
+		     	g.innerText = "Religion:"+" "+ response.religion;
+		     	h.innerText = "Marital Status:"+" "+ response.marital;
+		     	
+		     	
+		     	document.querySelector("#inform").innerHTML = "";
+		     	document.querySelector("#content").style.display = "block";
+		    	}
+		    else
+		    	{
+		    	 document.querySelector("#inform").innerHTML = "Go to the profile section to complete your About info first!";
+		    	}
+			}
+		}
+			
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_aboutinfo?id=${data.id}`, true);
+			xhttp.send();
+		}
+
+	function publish(){
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+		var temp = document.querySelector("#descr");
+		if (temp != "")
+		{
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				document.querySelector("#inform").innerHTML = xhttp.responseText;
+				temp.value="";
+				}
+			}
+			xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/publish_post?id=${data.id}&bio=${temp.value}`, true);
+			xhttp.send();
+		}else{
+			document.querySelector("#inform").innerHTML  = "Please write your description in the input tag below!"
+		}
+
+	}
+
+	(function(){
+
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
+		var holder = document.querySelector(".holder");
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			    // Typical action to be performed when the document is ready:
+			    var data = xhttp.responseText;
+			    if (data!="NULL")
+			    {
+			    	var obj  = JSON.parse(data);
+			    	for (x of obj){
+			    		holder.innerHTML = holder.innerHTML + `
+						<div class="ads_feed">
+							<h4 style="float:right;">${x.id}</h4>
+							<div class='row'>
+									<div class="col-md-6">
+										<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+										<h3>Age: ${x.age}</h3>
+										<h3>Religion: ${x.religion}</h3>
+										<h3>Education: ${x.education}</h3>
+										<h3>Profession: ${x.profession}</h3>
+									</div>
+									<div class="col-md-6">
+										<h3>Location: ${x.location}</h3>
+										<h3>Height: ${x.height}</h3>
+										<h3>Gender: ${x.gender}</h3>
+										<h3>Marital Status: ${x.marital}</h3>
+									</div>
+							</div>
+								<h3>Description: ${x.description}</h3>
+								<input type="text" placeholder="send a message...">
+								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
+						</div>`
+			    	}
+			    	document.querySelector("#inform").innerHTML="";
+			    }else
+			    {
+			    	document.querySelector("#inform").innerHTML="";
+			    }
+			}
+			}
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/random_posts`, true);
+			xhttp.send();
+
+	})();
+
+	function send_msg(parent){
+		var childs = parent.childNodes;
+		var rcvr_id = childs[1].innerText;
+		var msg = childs[7].value;
+		childs[7].value = "";
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				
+				var response = xhttp.responseText;
+				if (response != "NO MESSAGES!")
+				{
+						response = JSON.parse(response);
+						response = JSON.parse(response.messages);
+						if (`${data.id}` in response)
+						{
+							response[`${data.id}`] = response[`${data.id}`].concat([msg]);
+						}
+						else
+						{
+							response[`${data.id}`] = [msg];
+						}
+						
+				}
+				else
+				{
+					var sender_id = data.id;
+					response = {};
+					response[`${sender_id}`] = [msg];
+				}
+
+				response = JSON.stringify(response);
+
+				var xhttp2 = new XMLHttpRequest();
+				xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					       // Typical action to be performed when the document is ready:
+					//document.querySelector("#inform").innerHTML = xhttp2.responseText;
+					}
+				}
+				xhttp2.open("POST", `https://carnelian-zany-dichondra.glitch.me/update_inbox?id=${rcvr_id}&msg=${response}`, true);
+				xhttp2.send();
+			}
+		}
 	
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_inbox?id=${rcvr_id}`, true);
+			xhttp.send();
+}
+
+function make_inbox(){
+
+	var temp =  document.querySelector(".names");
+	temp.innerHTML = "<h3><strong>Sender</strong></h3><hr>";
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if (response != "NO MESSAGES!")
+			{
+				response = JSON.parse(response);
+				response = JSON.parse(response.messages);
+				for(key of Object.keys(response))
+				{
+					var xhttp2 = new XMLHttpRequest();
+					xhttp2.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+
+						var response2 = xhttp2.responseText;
+						response2 = JSON.parse(response2);
+			       		temp.innerHTML = temp.innerHTML + 
+			       		`<button onclick="display_msgs(this.nextSibling)" type="button" class="btn btn-primary btn-lg">${response2.first_name} ${response2.last_name}
+			       		</button><span style="visibility:hidden;">${key}</span><hr>`
+					
+						}
+					}
+					xhttp2.open("GET", `https://carnelian-zany-dichondra.glitch.me/name?id=${key}`, false);
+					xhttp2.send();
+
+				}
+				temp.innerHTML = temp.innerHTML + `<button onclick="refresh()" type="button" class="btn btn-success btn-sm"><i style="font-size:24px" class="fa">&#xf021;</i></button><hr>`
+		
+			}
+				
+		}
+	}
+	
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_inbox?id=${data.id}`, true);
+			xhttp.send();
+}
+
+function display_msgs(node)
+{
+	var id = node.innerHTML;
+	id_focus = id;
+	var temp =  document.querySelector(".messages");
+	temp.innerHTML = `<h3><strong>Messages</strong></h3>`;
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+		var response = xhttp.responseText;
+		if (response != "NO MESSAGES!")
+			{
+				response = JSON.parse(response);
+				response = JSON.parse(response.messages);
+				for (x of response[id])
+				{
+					temp.innerHTML = temp.innerHTML + `<h3>${x}</h3>`;
+				}
+				temp.innerHTML = temp.innerHTML +`<input type="text" id="reply" name="reply" placeholder="Reply here!" required>
+				<button onclick="reply()" type="button" class="btn btn-warning btn-sm">SEND</button>`;
+		
+			}
+				
+		}
+	}
+	
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_inbox?id=${data.id}`, true);
+			xhttp.send();
+}
+function inbox_visible(){
+	make_inbox();
+	document.querySelector('.inbox').style.display="block";
+}
+
+function reply(){
+	var temp = document.querySelector("#reply");
+	var rcvr_id = id_focus;
+	var msg = temp.value;
+	temp.value = "";
+
+	if (msg != "")
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			       // Typical action to be performed when the document is ready:
+				
+				var response = xhttp.responseText;
+				if (response != "NO MESSAGES!")
+				{
+						response = JSON.parse(response);
+						response = JSON.parse(response.messages);
+						if (`${data.id}` in response)
+						{
+							response[`${data.id}`] = response[`${data.id}`].concat([msg]);
+						}
+						else
+						{
+							response[`${data.id}`] = [msg];
+						}
+						
+				}
+				else
+				{
+					var sender_id = data.id;
+					response = {};
+					response[`${sender_id}`] = [msg];
+				}
+
+				response = JSON.stringify(response);
+
+				var xhttp2 = new XMLHttpRequest();
+				xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					       // Typical action to be performed when the document is ready:
+					//document.querySelector("#inform").innerHTML = xhttp2.responseText;
+					}
+				}
+				xhttp2.open("POST", `https://carnelian-zany-dichondra.glitch.me/update_inbox?id=${rcvr_id}&msg=${response}`, true);
+				xhttp2.send();
+			}
+		}
+	
+			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_inbox?id=${rcvr_id}`, true);
+			xhttp.send();	
+	}
+}
+function refresh(){
+	make_inbox();
+}
 </script>
