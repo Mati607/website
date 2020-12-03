@@ -67,6 +67,7 @@
 
 	<div class="inbox">
 		<button style="float:right; margin:5px;" onclick="((function(){document.querySelector('.inbox').style.display='none'; newsfeed();})())" type="button" class="btn btn-danger btn-sm">X</button><hr>
+		<h3 id="inform21"></h3>
 		<div class='row'>
 			<div class="col-md-4 names">
 				<h3><strong>Sender</strong></h3><hr>
@@ -268,6 +269,7 @@
 function make_inbox(){
 
 	var temp =  document.querySelector(".names");
+	document.querySelector('#inform21').innerHTML = "<img src='loading.gif' alt='loading'>";
 	temp.innerHTML = "<h3><strong>Sender</strong></h3><hr>";
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -297,8 +299,13 @@ function make_inbox(){
 
 				}
 				temp.innerHTML = temp.innerHTML + `<button onclick="refresh()" type="button" class="btn btn-success btn-sm"><i style="font-size:24px" class="fa">&#xf021;</i></button><hr>`
+				document.querySelector('#inform21').innerHTML = "";
 		
 			}
+			else{
+				document.querySelector('#inform21').innerHTML = "<strong>No Messages</strong>";
+			}
+
 				
 		}
 	}
@@ -403,7 +410,7 @@ function refresh(){
 }
 
 function SEARCH(node){
-	document.querySelector("#inform10").innerHTML = "<img src='loading.gif' alt='loading'>"
+	document.querySelector("#inform10").innerHTML = "<img src='loading.gif' alt='loading'>";
 	var holder = document.querySelector(".holder");
 	document.querySelector("#inform10").innerHTML = "";
 	holder.innerHTML = "";
