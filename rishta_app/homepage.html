@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="stylesheet/home.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
@@ -19,10 +20,11 @@
 	</div>
 	<div id="post">
 		<h3 id ="inform"></h3>
+		<button type="button" class="btn btn-warning btn-block" onclick="make_visible()">Search profile</button>
 		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Make a rishta post</button>
 		<button type="button" class="btn btn-info btn-block" onclick="inbox_visible()">Check Inbox</button>
 		<div id="content">
-			<button style="float:right; margin:10px;"onclick="document.querySelector('#content').style.display='none'" type="button" class="btn btn-danger btn-sm">X</button>
+			<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#content').style.display='none'; newsfeed(); document.querySelector('#inform100').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
 			<h3>Your rishta post will include the following information about you:<h3>
 			<div class='row'>
 				<div class="col-md-4">
@@ -39,12 +41,32 @@
 				</div>
 			</div>
 	  		<input type="text" id="descr" name="descr" placeholder="Describe yourself here!" required><br>
+	  		<h3 id="inform100"><h3>
 	  		<button onclick="publish()" type="button" class="btn btn-success btn-sm">Publish Post</button>
+	  		<button onclick="stats()" type="button" class="btn btn-danger btn-sm">Post Stats</button>
+		</div>
+	</div>
+
+	<div id="search">
+		<button style="float:right; margin:10px;"onclick="closely()" type="button" class="btn btn-danger btn-sm">X</button>
+		<h3 id="inform10"></h3>
+		<h3>Fill any one or multiple fields by which you want to search and then click submit</h3>
+		<div id="inner">
+			<input type="text" id="first_name" placeholder="First Name...">
+			<input type="text" id="last_name" placeholder="Last Name...">
+			<input type="text" id="age" placeholder="Age...">
+			<input type="text" id="religion" placeholder="Religion...">
+			<input type="text" id="education" placeholder="Education...">
+			<input type="text" id="profession" placeholder="Profession...">
+			<input type="text" id="location" placeholder="Location..."> 
+			<input type="text" id="gender" placeholder="Gender (male/female)..."> 
+			<input type="text" id="marital" placeholder="Marital (single/divorced)..."><br> 
+			<button type="button" onclick="SEARCH(this.parentNode)" class="btn btn-success btn-sm">Search</button>
 		</div>
 	</div>
 
 	<div class="inbox">
-		<button style="float:right; margin:5px;"onclick="document.querySelector('.inbox').style.display='none'" type="button" class="btn btn-danger btn-sm">X</button><hr>
+		<button style="float:right; margin:5px;" onclick="((function(){document.querySelector('.inbox').style.display='none'; newsfeed();})())" type="button" class="btn btn-danger btn-sm">X</button><hr>
 		<div class='row'>
 			<div class="col-md-4 names">
 				<h3><strong>Sender</strong></h3><hr>
@@ -71,7 +93,7 @@
 	}
 
 	function makepost(){
-		document.querySelector("#inform").innerHTML  = "<img src='loading2.gif' alt='loading'>";
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
 
 		var a=document.querySelector("#age");
 		var b=document.querySelector("#gender");
@@ -101,7 +123,10 @@
 		     	
 		     	
 		     	document.querySelector("#inform").innerHTML = "";
+		     	document.querySelector(".holder").innerHTML = "";
 		     	document.querySelector("#content").style.display = "block";
+				document.querySelector(".inbox").style.display = "none";
+				document.querySelector('#search').style.display="none";
 		    	}
 		    else
 		    	{
@@ -115,7 +140,7 @@
 		}
 
 	function publish(){
-		document.querySelector("#inform").innerHTML  = "<img src='loading2.gif' alt='loading'>";
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
 		var temp = document.querySelector("#descr");
 		if (temp != "")
 		{
@@ -135,10 +160,11 @@
 
 	}
 
-	(function(){
+	function newsfeed(){
 
-		document.querySelector("#inform").innerHTML  = "<img src='loading2.gif' alt='loading'>";
+		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
 		var holder = document.querySelector(".holder");
+		holder.innerHTML = "";
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -168,9 +194,13 @@
 							</div>
 								<h3>Description: ${x.description}</h3>
 								<input type="text" placeholder="send a message...">
-								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
+								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")' onclick="send_msg(this.parentNode)" class='far fa-paper-plane' style='font-size:36px;'></i>
+								<i onmouseup='useless(this,"0")' onmouseleave='useless(this,"0")' onmousedown='useless(this,"1")' onclick='react("love",this.parentNode)' class='far fa-heart' style='font-size:36px;color:red;margin-left:100px;'></i>
+								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("thumbs",this.parentNode)' class='far fa-thumbs-up' style='font-size:36px;color:blue'></i>
+								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("fire",this.parentNode)' class='fas fa-fire' style='font-size:36px;color:#f27d0c;'></i>
 						</div>`
 			    	}
+			    	holder.innerHTML = holder.innerHTML + `<button style="margin-bottom:30px; margin-top: 30px; width:700px; margin-left:300px; margin-right:300px;" onclick="newsfeed()" type="button" class="btn btn-success btn-block">More Profiles</button>`;
 			    	document.querySelector("#inform").innerHTML="";
 			    }else
 			    {
@@ -181,7 +211,8 @@
 			xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/random_posts`, true);
 			xhttp.send();
 
-	})();
+	};
+	newsfeed();
 
 	function send_msg(parent){
 		var childs = parent.childNodes;
@@ -307,8 +338,11 @@ function display_msgs(node)
 			xhttp.send();
 }
 function inbox_visible(){
+	document.querySelector('.holder').innerHTML="";
 	make_inbox();
 	document.querySelector('.inbox').style.display="block";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector('#search').style.display="none";
 }
 
 function reply(){
@@ -366,5 +400,121 @@ function reply(){
 }
 function refresh(){
 	make_inbox();
+}
+
+function SEARCH(node){
+	var holder = document.querySelector(".holder");
+	document.querySelector("#inform10").innerHTML = "";
+	holder.innerHTML = "";
+	tags = node.children;
+	url = "";
+	for(i=0;i<9;i++){
+		if(tags[i].value != ""){
+			url = url + `${tags[i].id}=${tags[i].value.toLowerCase()}&`;
+		}
+	}
+	url = url.slice(0,-1);
+	if(url!=""){
+		url = "https://carnelian-zany-dichondra.glitch.me/search?" + url;
+	}
+	
+	if(url!=""){
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			// Typical action to be performed when the document is ready:
+			var response = xhttp.responseText;
+			if(response == "NULL"){
+				document.querySelector("#inform10").innerHTML = "<strong>No records found!</strong>";
+			}
+			else{
+					var obj = JSON.parse(response);
+					holder.innerHTML = "<h3 style='margin-left:320px;'><strong>Search results are as follows:</strong></h3>";
+					for (x of obj){
+			    		holder.innerHTML = holder.innerHTML + `
+						<div class="ads_feed">
+							<h4 style="float:right;">${x.id}</h4>
+							<div class='row'>
+									<div class="col-md-6">
+										<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+										<h3>Age: ${x.age}</h3>
+										<h3>Religion: ${x.religion}</h3>
+										<h3>Education: ${x.education}</h3>
+										<h3>Profession: ${x.profession}</h3>
+									</div>
+									<div class="col-md-6">
+										<h3>Location: ${x.location}</h3>
+										<h3>Height: ${x.height}</h3>
+										<h3>Gender: ${x.gender}</h3>
+										<h3>Marital Status: ${x.marital}</h3>
+									</div>
+							</div>
+								<h3>Email: ${x.email}</h3>
+								<input type="text" placeholder="send a message...">
+								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
+						</div>`
+					}
+				}
+				for(i=0;i<9;i++){
+					tags[i].value = "";
+				}
+		}
+	}
+		xhttp.open("GET",url, true);
+		xhttp.send();
+	}
+}
+function make_visible(node){
+	document.querySelector(".holder").innerHTML = "";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector(".inbox").style.display = "none";
+	document.querySelector('#search').style.display="block";
+}
+function closely(){
+	document.querySelector(".holder").innerHTML = "";
+	newsfeed();
+	document.querySelector('#search').style.display='none';
+}
+
+function react(type,parent){
+	var childs = parent.childNodes;
+	var rcvr_id = childs[1].innerText;
+	console.log(type);
+
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+					    
+					}
+		}
+	xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/update_react?id=${rcvr_id}&type=${type}`, true);
+	xhttp.send();
+}
+function stats(){
+	var temp = document.querySelector('#inform100');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var response = xhttp.responseText;
+			if(response=='NULL'){
+				temp.innerHTML="<strong>No reacts uptill now</strong>";
+			}
+			else
+			{
+				response = JSON.parse(response);
+				temp.innerHTML=`<strong>your post recieved ${response.love} loves, ${response.thumbs} thumbs up and ${response.fire} fire reacts</strong>`
+			}		    
+		}
+	}
+	xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_react?id=${data.id}`, true);
+	xhttp.send();
+}
+function useless(node,type){
+	if(type=="1"){
+		node.style.fontSize="26px";
+	}else{
+		node.style.fontSize="36px";
+	}
 }
 </script>

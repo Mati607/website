@@ -44,6 +44,8 @@
 		background-image: url("rose-cmprs.png");
 		color:white;
   		background-size: cover;
+
+
 	}
 	#login
 	{	
@@ -106,9 +108,9 @@
 		var gender = document.querySelector("#gender");
 		var mail = document.querySelector("#mail");
 		var pswrd = document.querySelector("#pswrd");
+		var less = gender.value.toLowerCase();
 
-		if ((first.value != "") && (last.value != "") && (gender.value != "") && (mail.value != "") && (pswrd.value != "")){
-
+		if ((less=="male" || less=="female") && (first.value != "") && (last.value != "") && (gender.value != "") && (mail.value != "") && (pswrd.value != "")){
 			k.innerHTML = "<img src='loading.gif' alt='loading'>"
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -130,6 +132,13 @@
 						password=${pswrd.value}`, true);
 			xhttp.send();
 
+		}else{
+			document.querySelector("#inform1").innerHTML = "<strong>Please enter valid data!</strong>";
+			first.value = "";
+		    last.value = "";
+		    gender.value = "";
+		    mail.value = "";
+		    pswrd.value = "";
 		}
 	}
 	function do_login()
