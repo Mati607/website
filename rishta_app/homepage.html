@@ -403,6 +403,7 @@ function refresh(){
 }
 
 function SEARCH(node){
+	document.querySelector("#inform10").innerHTML = "<img src='loading.gif' alt='loading'>"
 	var holder = document.querySelector(".holder");
 	document.querySelector("#inform10").innerHTML = "";
 	holder.innerHTML = "";
@@ -455,6 +456,7 @@ function SEARCH(node){
 								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
 						</div>`
 					}
+					document.querySelector("#inform10").innerHTML = "";
 				}
 				for(i=0;i<9;i++){
 					tags[i].value = "";
