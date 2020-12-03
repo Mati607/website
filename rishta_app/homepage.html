@@ -49,7 +49,7 @@
 
 	<div id="search">
 		<button style="float:right; margin:10px;"onclick="closely()" type="button" class="btn btn-danger btn-sm">X</button>
-		<h3 id="inform10"></h3>
+		<h3 id="inform101"></h3>
 		<h3>Fill any one or multiple fields by which you want to search and then click submit</h3>
 		<div id="inner">
 			<input type="text" id="first_name" placeholder="First Name...">
@@ -410,7 +410,7 @@ function refresh(){
 }
 
 function SEARCH(node){
-	document.querySelector("#inform10").innerHTML = "<img src='loading.gif' alt='loading'>";
+	document.querySelector("#inform101").innerHTML = "<img src='loading.gif' alt='loading'>";
 	var holder = document.querySelector(".holder");
 	document.querySelector("#inform10").innerHTML = "";
 	holder.innerHTML = "";
@@ -434,7 +434,7 @@ function SEARCH(node){
 			// Typical action to be performed when the document is ready:
 			var response = xhttp.responseText;
 			if(response == "NULL"){
-				document.querySelector("#inform10").innerHTML = "<strong>No records found!</strong>";
+				document.querySelector("#inform101").innerHTML = "<strong>No records found!</strong>";
 			}
 			else{
 					var obj = JSON.parse(response);
@@ -463,7 +463,7 @@ function SEARCH(node){
 								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
 						</div>`
 					}
-					document.querySelector("#inform10").innerHTML = "";
+					document.querySelector("#inform101").innerHTML = "";
 				}
 				for(i=0;i<9;i++){
 					tags[i].value = "";
@@ -483,6 +483,7 @@ function make_visible(node){
 function closely(){
 	document.querySelector(".holder").innerHTML = "";
 	newsfeed();
+	document.querySelector('#inform101').innerHTML='';
 	document.querySelector('#search').style.display='none';
 }
 
