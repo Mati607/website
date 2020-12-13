@@ -14,14 +14,14 @@
 		<ul>
   			<li><a class="activeyyy"></a></li>
   			<li style="float:right"><a onclick="show_profile()" href="#">profile</a></li>
-  			<li style="float:right"><a href="#">Contact</a></li>
-  			<li style="float:right"><a href="#">About</a></li>
+  			<li style="float:right"><a href="contact.html">Contact</a></li>
+  			<li style="float:right"><a href="about.html">About</a></li>
 		</ul>
 	</div>
 	<div id="post">
 		<h3 id ="inform"></h3>
 		<button type="button" class="btn btn-warning btn-block" onclick="make_visible()">Search profile</button>
-		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Make a rishta post</button>
+		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Manage your rishta post here</button>
 		<button type="button" class="btn btn-info btn-block" onclick="inbox_visible()">Check Inbox</button>
 		<div id="content">
 			<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#content').style.display='none'; newsfeed(); document.querySelector('#inform100').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
@@ -44,6 +44,7 @@
 	  		<h3 id="inform100"><h3>
 	  		<button onclick="publish()" type="button" class="btn btn-success btn-sm">Publish Post</button>
 	  		<button onclick="stats()" type="button" class="btn btn-danger btn-sm">Post Stats</button>
+	  		<button style="visibility:hidden;" id ="rishta_win" onclick="delete_post()" type="button" class="btn btn-primary btn-sm">Rishta successfull</button>
 		</div>
 	</div>
 
@@ -93,7 +94,26 @@
 		window.location.replace("profile.html");	
 	}
 
+	function rishta_button(){
+		var temp = document.querySelector('#rishta_win');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if (xhttp.responseText != "NULL"){
+					temp.style.visibility="visible";
+				}
+				else
+				{
+					temp.style.visibility="hidden";
+				}
+			}
+		}
+		xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/get_post?id=${data.id}`, true);
+		xhttp.send();
+	}
+
 	function makepost(){
+		rishta_button();
 		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
 
 		var a=document.querySelector("#age");
@@ -141,6 +161,7 @@
 		}
 
 	function publish(){
+		var temp2 = document.querySelector('#rishta_win');
 		document.querySelector("#inform").innerHTML  = "<img src='loading.gif' alt='loading'>";
 		var temp = document.querySelector("#descr");
 		if (temp != "")
@@ -151,6 +172,7 @@
 			       // Typical action to be performed when the document is ready:
 				document.querySelector("#inform").innerHTML = xhttp.responseText;
 				temp.value="";
+				temp2.style.visibility = "visible";
 				}
 			}
 			xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/publish_post?id=${data.id}&bio=${temp.value}`, true);
@@ -160,6 +182,7 @@
 		}
 
 	}
+
 
 	function newsfeed(){
 
@@ -175,31 +198,54 @@
 			    {
 			    	var obj  = JSON.parse(data);
 			    	for (x of obj){
-			    		holder.innerHTML = holder.innerHTML + `
-						<div class="ads_feed">
-							<h4 style="float:right;">${x.id}</h4>
-							<div class='row'>
-									<div class="col-md-6">
-										<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
-										<h3>Age: ${x.age}</h3>
-										<h3>Religion: ${x.religion}</h3>
-										<h3>Education: ${x.education}</h3>
-										<h3>Profession: ${x.profession}</h3>
-									</div>
-									<div class="col-md-6">
-										<h3>Location: ${x.location}</h3>
-										<h3>Height: ${x.height}</h3>
-										<h3>Gender: ${x.gender}</h3>
-										<h3>Marital Status: ${x.marital}</h3>
-									</div>
-							</div>
-								<h3>Description: ${x.description}</h3>
-								<input type="text" placeholder="send a message...">
-								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")' onclick="send_msg(this.parentNode)" class='far fa-paper-plane' style='font-size:36px;'></i>
-								<i onmouseup='useless(this,"0")' onmouseleave='useless(this,"0")' onmousedown='useless(this,"1")' onclick='react("love",this.parentNode)' class='far fa-heart' style='font-size:36px;color:red;margin-left:100px;'></i>
-								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("thumbs",this.parentNode)' class='far fa-thumbs-up' style='font-size:36px;color:blue'></i>
-								<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("fire",this.parentNode)' class='fas fa-fire' style='font-size:36px;color:#f27d0c;'></i>
-						</div>`
+			    		if(x.flag!=0){
+				    		var strng = "";
+				    		strng = strng + `
+							<div class="ads_feed">
+								<h4 style="float:right;">${x.id}</h4>`
+							if(x.value!=null){
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(x.value);
+								if(5-x.value > 0){
+									strng = strng + `<span class="fa fa-star"></span>`.repeat(5-x.value);
+								}
+							}
+							else
+							{
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(2);
+								strng = strng + `<span class="fa fa-star "></span>`.repeat(3);
+							}
+							strng = strng + `
+								<div class='row'>
+										<div class="col-md-6">
+											<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+											<h3>Age: ${x.age}</h3>
+											<h3>Religion: ${x.religion}</h3>
+											<h3>Education: ${x.education}</h3>
+											<h3>Profession: ${x.profession}</h3>
+										</div>
+										<div class="col-md-6">
+											<h3>Location: ${x.location}</h3>
+											<h3>Height: ${x.height}</h3>
+											<h3>Gender: ${x.gender}</h3>
+											<h3>Marital Status: ${x.marital}</h3>
+										</div>
+								</div>
+									<h3>Description: ${x.description}</h3>
+									<input type="text" placeholder="send a message...">
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")' onclick="send_msg(this.parentNode)" class='far fa-paper-plane' style='font-size:36px;'></i>
+									<i onmouseup='useless(this,"0")' onmouseleave='useless(this,"0")' onmousedown='useless(this,"1")' onclick='react("love",this.parentNode)' class='far fa-heart' style='font-size:36px;color:red;margin-left:100px;'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("thumbs",this.parentNode)' class='far fa-thumbs-up' style='font-size:36px;color:blue'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("fire",this.parentNode)' class='fas fa-fire' style='font-size:36px;color:#f27d0c;'></i>
+									<button style="margin-top:13px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-info btn-block">Rate profile</button>
+	  								<input style="display:none;" onmouseup="submit_rating(this.parentNode,this.value,this)"  type="range" min="0" max="5">
+	  								<button style="margin-top:3px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block';this.nextSibling.nextSibling.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-primary btn-block">Recommend profile</button>
+	  								<input style="display:none; width:100%; type="text" placeholder="Enter receiver email id">
+	  								<button style="margin-top:3px; display:none" onclick="send_mail(this.previousSibling.previousSibling,this.parentNode)"  type="button" class="btn btn-primary">submit</button>
+
+
+							</div>`
+							holder.innerHTML = holder.innerHTML + strng;
+						}
 			    	}
 			    	holder.innerHTML = holder.innerHTML + `<button style="margin-bottom:30px; margin-top: 30px; width:700px; margin-left:300px; margin-right:300px;" onclick="newsfeed()" type="button" class="btn btn-success btn-block">More Profiles</button>`;
 			    	document.querySelector("#inform").innerHTML="";
@@ -217,9 +263,10 @@
 
 	function send_msg(parent){
 		var childs = parent.childNodes;
+		console.log(childs);
 		var rcvr_id = childs[1].innerText;
-		var msg = childs[7].value;
-		childs[7].value = "";
+		var msg = childs[12].value;
+		childs[12].value = "";
 
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -411,6 +458,7 @@ function refresh(){
 
 function SEARCH(node){
 	document.querySelector("#inform101").innerHTML = "<img src='loading.gif' alt='loading'>";
+	var count =0;
 	var holder = document.querySelector(".holder");
 	holder.innerHTML = "";
 	tags = node.children;
@@ -439,30 +487,58 @@ function SEARCH(node){
 					var obj = JSON.parse(response);
 					holder.innerHTML = "<h3 style='margin-left:320px;'><strong>Search results are as follows:</strong></h3>";
 					for (x of obj){
-			    		holder.innerHTML = holder.innerHTML + `
-						<div class="ads_feed">
-							<h4 style="float:right;">${x.id}</h4>
-							<div class='row'>
-									<div class="col-md-6">
-										<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
-										<h3>Age: ${x.age}</h3>
-										<h3>Religion: ${x.religion}</h3>
-										<h3>Education: ${x.education}</h3>
-										<h3>Profession: ${x.profession}</h3>
-									</div>
-									<div class="col-md-6">
-										<h3>Location: ${x.location}</h3>
-										<h3>Height: ${x.height}</h3>
-										<h3>Gender: ${x.gender}</h3>
-										<h3>Marital Status: ${x.marital}</h3>
-									</div>
-							</div>
-								<h3>Email: ${x.email}</h3>
-								<input type="text" placeholder="send a message...">
-								<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
-						</div>`
+						if(x.flag != 0){
+							console.log(x.flag);
+							count = count +1;
+							var strng = "";
+				    		strng = strng+ `
+							<div class="ads_feed">
+								<h4 style="float:right;">${x.id}</h4>
+								`
+							if(x.value!=null){
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(x.value);
+								if(5-x.value > 0){
+									strng = strng + `<span class="fa fa-star"></span>`.repeat(5-x.value);
+								}
+							}
+							else
+							{
+								strng = strng + `<span class="fa fa-star checked"></span>`.repeat(2);
+								strng = strng + `<span class="fa fa-star "></span>`.repeat(3);
+							}
+
+							strng = strng + `<div class='row'>
+										<div class="col-md-6">
+											<h3><strong>Name: ${x.first_name} ${x.last_name}</strong></h3>
+											<h3>Age: ${x.age}</h3>
+											<h3>Religion: ${x.religion}</h3>
+											<h3>Education: ${x.education}</h3>
+											<h3>Profession: ${x.profession}</h3>
+										</div>
+										<div class="col-md-6">
+											<h3>Location: ${x.location}</h3>
+											<h3>Height: ${x.height}</h3>
+											<h3>Gender: ${x.gender}</h3>
+											<h3>Marital Status: ${x.marital}</h3>
+										</div>
+								</div>
+									<h3>Email: ${x.email}</h3>
+									<input type="text" placeholder="send a message...">
+									<button onclick="send_msg(this.parentNode)" type="button" class="btn btn-warning btn-sm">SEND</button>
+									<button style="margin-top:13px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-info btn-block">Rate profile</button>
+	  								<input style="display:none;" onmouseup="submit_rating(this.parentNode,this.value,this)"  type="range" min="0" max="5">
+							</div>`
+
+							holder.innerHTML = holder.innerHTML + strng;
+						}
 					}
-					document.querySelector("#inform101").innerHTML = "<strong>scroll down to view results</strong>";
+					if(count>0){
+						document.querySelector("#inform101").innerHTML = "<strong>scroll down to view results</strong>";
+					}else
+					{
+						holder.innerHTML = "";
+						document.querySelector("#inform101").innerHTML = "<strong>No records found!</strong>";
+					}
 				}
 				for(i=0;i<9;i++){
 					tags[i].value = "";
@@ -525,5 +601,51 @@ function useless(node,type){
 	}else{
 		node.style.fontSize="36px";
 	}
+}
+function delete_post(){
+	var temp2 = document.querySelector('#rishta_win');
+	var temp = document.querySelector('#inform');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			temp.innerHTML="<strong>Congratulations on finding your match!. Your rishta post has been removed</strong>";
+			temp2.style.visibility = "hidden";
+			window.scrollTo(0, 0);
+		}
+	}
+	xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/delete_post?id=${data.id}`, true);
+	xhttp.send();
+}
+
+function submit_rating(parent,vale,tmp){
+		var childs = parent.childNodes;
+		var rcvr_id = childs[1].innerText;
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		}
+	}
+	xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/submit_rating?id=${rcvr_id}&val=${vale}`, true);
+	xhttp.send();
+}		
+
+function send_mail(node,parent){
+ 	   var childs = parent.childNodes;
+	   var rcvr_id = childs[1].innerText;
+	   var email = node.value;
+	   var full = data.first_name +" "+ data.last_name ;
+	   node.value="";
+	   node.style.display="none";
+	   node.nextSibling.nextSibling.style.display = "none";
+
+	   var xhttp = new XMLHttpRequest();
+	   xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		}
+	 }
+	xhttp.open("get", `https://carnelian-zany-dichondra.glitch.me/send_email?name=${full}&id=${rcvr_id}&mail=${email}`, true);
+	xhttp.send();	
+	
 }
 </script>

@@ -14,6 +14,7 @@
 		<button onclick="change_layout(1)">change password</button>
 		<button onclick="change_layout(2)">deactivate profile</button><br><br>
 		<button onclick="change_layout(3)">Edit About info</button>
+		<button onclick="change_layout(4)">privacy setting</button>
 		<button onclick="window.location.replace('homepage.html')">back</button>
 		<button onclick="logout()">Log out</button>
 	</div>
@@ -67,6 +68,12 @@
 	  	<button onclick="location.reload()">Back</button>
 	  	<h2 id="inform4"></h2>	
 	 </div>
+	 <div id ="privacy">
+	  		<h3 id = "inform5"></h3>
+	  		<button onclick="location.reload()">Back</button>
+	  		<button onclick="privacy_ch(0)">Turn privacy on</button>
+	  		<button onclick="privacy_ch(1)">Turn privacy off</button>
+	 </div>
 </body>
 
 </html>
@@ -113,6 +120,13 @@
 			y.style.visibility = "visible";
 			
 		}
+		if(x==4){
+			var x = document.querySelector("#view");
+			var y = document.querySelector("#privacy");
+			x.style.visibility = "hidden";
+			y.style.visibility = "visible";
+			
+		}
 	}
 	function c_profile(){
 
@@ -147,6 +161,49 @@
 
 	}
 
+	function privacy_ch(val){
+		var temp = document.querySelector('#inform5');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				
+				if(val == 0){
+						temp.innerHTML = "<strong>Your profile info is currently hidden</strong>"
+					}else
+					{
+						temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+					}
+				
+			}
+		}
+		xhttp.open("POST", `https://carnelian-zany-dichondra.glitch.me/update_privacy?id=${data.id}&flag=${val}`, true);
+		xhttp.send();
+	}
+
+
+	function privacy_setting(){
+		var temp = document.querySelector('#inform5');
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(xhttp.responseText == "NULL"){
+					temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+				}
+				else{
+					response = JSON.parse(xhttp.responseText);
+					if(response.flag == 0){
+						temp.innerHTML = "<strong>Your profile info is currently hidden</strong>"
+					}else
+					{
+						temp.innerHTML = "<strong>Your profile info is currently public</strong>"
+					}
+				}
+			}
+		}
+		xhttp.open("GET", `https://carnelian-zany-dichondra.glitch.me/privacy?id=${data.id}`, true);
+		xhttp.send();
+	}
+	privacy_setting();
 	function c_password(){
 
 		var k = document.querySelector("#inform2");
