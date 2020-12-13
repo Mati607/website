@@ -22,6 +22,7 @@
 		<h3 id ="inform"></h3>
 		<button type="button" class="btn btn-warning btn-block" onclick="make_visible()">Search profile</button>
 		<button type="button" class="btn btn-primary btn-block" onclick="makepost()">Manage your rishta post here</button>
+		<button type="button" class="btn btn-success btn-block" onclick="agents()" >Aquire services of a rishta aunty</button>
 		<button type="button" class="btn btn-info btn-block" onclick="inbox_visible()">Check Inbox</button>
 		<div id="content">
 			<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#content').style.display='none'; newsfeed(); document.querySelector('#inform100').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
@@ -46,6 +47,17 @@
 	  		<button onclick="stats()" type="button" class="btn btn-danger btn-sm">Post Stats</button>
 	  		<button style="visibility:hidden;" id ="rishta_win" onclick="delete_post()" type="button" class="btn btn-primary btn-sm">Rishta successfull</button>
 		</div>
+	</div>
+
+	<div id="agent">
+		<button style="float:right; margin:10px;"onclick="((function(){document.querySelector('#agent').style.display='none'; newsfeed(); document.querySelector('#inform212').innerHTML=''; })())" type="button" class="btn btn-danger btn-sm">X</button>
+		<h3 id = "inform212"></h3>
+		<h3>We have two types of rishta agents available</h3>
+		<h3>1. Basic aunty will find you a match with in 14 days in just $250</h3>
+		<h3>2. Experienced aunty will find you a match with in 7 days in just $500</h3>
+		<button onclick="get_aunty(0)" type="button" class="btn btn-success btn-sm">Hire Basic aunty</button>
+		<button onclick="get_aunty(1)" type="button" class="btn btn-primary btn-sm">Hire Experienced aunty</button>
+		<button id = "cancel123" onclick="delete_aunty()" style="visibility:hidden;" type="button" class="btn btn-primary btn-sm">Cancel services</button>
 	</div>
 
 	<div id="search">
@@ -148,6 +160,7 @@
 		     	document.querySelector("#content").style.display = "block";
 				document.querySelector(".inbox").style.display = "none";
 				document.querySelector('#search').style.display="none";
+				document.querySelector('#agent').style.display="none";
 		    	}
 		    else
 		    	{
@@ -397,6 +410,7 @@ function inbox_visible(){
 	document.querySelector('.inbox').style.display="block";
 	document.querySelector("#content").style.display = "none";
 	document.querySelector('#search').style.display="none";
+	document.querySelector('#agent').style.display="none";
 }
 
 function reply(){
@@ -553,6 +567,7 @@ function make_visible(node){
 	document.querySelector(".holder").innerHTML = "";
 	document.querySelector("#content").style.display = "none";
 	document.querySelector(".inbox").style.display = "none";
+	document.querySelector('#agent').style.display="none";
 	document.querySelector('#search').style.display="block";
 }
 function closely(){
@@ -647,5 +662,63 @@ function send_mail(node,parent){
 	xhttp.open("get", `https://carnelian-zany-dichondra.glitch.me/send_email?name=${full}&id=${rcvr_id}&mail=${email}`, true);
 	xhttp.send();	
 	
+}
+function agents(){
+	document.querySelector(".holder").innerHTML = "";
+	document.querySelector("#content").style.display = "none";
+	document.querySelector(".inbox").style.display = "none";
+	document.querySelector('#search').style.display="none";
+	document.querySelector('#agent').style.display="block";
+}
+
+function get_aunty(type){
+	var temp2 = document.querySelector('#inform212');
+	var temp3 = document.querySelector('#cancel123');
+	var xhttp = new XMLHttpRequest();
+	var type1 = 0;
+	var type2 = 0;
+	if(type==0){
+		type1 = 1;
+	}
+	else{
+		type2 = 1;
+	}
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var response = xhttp.responseText;
+			if(response !="Done"){
+				response = JSON.parse(response);
+				if (response.type1 == 1){
+					temp2.innerHTML = `<strong>You have already hired the services of a basic aunty</strong>`
+				}
+				else
+				{
+					temp2.innerHTML = `<strong>You have already hired the services of an tajarbakar aunty</strong>`
+				}
+			}else
+			{
+				temp2.innerHTML = `<strong>Your request have been lodged. A rishta aunty will contact you soon on your email or inbox and then you can mutually discuss on the pricing and requirements.</strong>`
+			
+			}
+			temp3.style.visibility='visible';
+		}
+	 }
+	xhttp.open("post", `https://carnelian-zany-dichondra.glitch.me/register_aunty?id=${data.id}&type1=${type1}&type2=${type2}`, true);
+	xhttp.send();	
+}
+
+function delete_aunty(){
+	var temp3 = document.querySelector('#cancel123');
+	var temp2 = document.querySelector('#inform212');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			temp2.innerHTML = `<strong>Rishta aunty services have been removed.</strong>`
+			temp3.style.visibility="hidden";
+		}
+	 }
+	xhttp.open("get", `https://carnelian-zany-dichondra.glitch.me/delete_aunty?id=${data.id}`, true);
+	xhttp.send();	
 }
 </script>
