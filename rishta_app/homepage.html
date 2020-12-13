@@ -540,6 +540,9 @@ function SEARCH(node){
 									<h3>Email: ${x.email}</h3>
 									<input type="text" placeholder="send a message...">
 									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")' onclick="send_msg(this.parentNode)" class='far fa-paper-plane' style='font-size:36px;'></i>
+									<i onmouseup='useless(this,"0")' onmouseleave='useless(this,"0")' onmousedown='useless(this,"1")' onclick='react("love",this.parentNode)' class='far fa-heart' style='font-size:36px;color:red;margin-left:100px;'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("thumbs",this.parentNode)' class='far fa-thumbs-up' style='font-size:36px;color:blue'></i>
+									<i onmouseleave='useless(this,"0")' onmouseup='useless(this,"0")' onmousedown='useless(this,"1")'  onclick='react("fire",this.parentNode)' class='fas fa-fire' style='font-size:36px;color:#f27d0c;'></i>
 									<button style="margin-top:13px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-info btn-block">Rate profile</button>
 	  								<input style="display:none;" onmouseup="submit_rating(this.parentNode,this.value,this)"  type="range" min="0" max="5">
 	  								<button style="margin-top:3px" onclick="(()=>{this.nextSibling.nextSibling.style.display='block';this.nextSibling.nextSibling.nextSibling.nextSibling.style.display='block'})()"  type="button" class="btn btn-primary btn-block">Recommend profile</button>
