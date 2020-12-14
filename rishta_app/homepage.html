@@ -277,10 +277,9 @@
 
 	function send_msg(parent){
 		var childs = parent.childNodes;
-		console.log(childs);
 		var rcvr_id = childs[1].innerText;
-		var msg = childs[12].value;
-		childs[12].value = "";
+		var msg = childs[14].value;
+		childs[14].value = "";
 
 		var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
