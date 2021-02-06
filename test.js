@@ -1,3 +1,1 @@
-(()=>{
-	alert("hehe,you are hacked!");
-})();
+alert("hacked);
