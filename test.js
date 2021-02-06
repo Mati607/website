@@ -1,1 +1,3 @@
-window.onload= alert("hacked");
+<script>
+  alert(123);
+ </script>
