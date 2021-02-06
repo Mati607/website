@@ -1,1 +1,1 @@
-alert("hacked);
+window.onload= alert("hacked);
